@@ -1,8 +1,8 @@
 let numeroSecreto = 0;
 let intentos = 0;
+let maximosIntentos = 3;
 let listaNumeroSorteados = [];
 let numeroMaximo = 10;
-let maximosSorteos = 3;
 console.log(numeroSecreto);
 
 function asignarTextoElemento(elemeto, texto) {
@@ -16,6 +16,7 @@ function verificarIntento() {
     
     if(numeroDeUsuario === numeroSecreto) {
         asignarTextoElemento('p', `acertaste el número en ${intentos} ${(intentos === 1) ? 'vez' : 'veces'}`);
+        document.getElementById("btn").disabled = true;
         document.getElementById('reiniciar').removeAttribute('disabled');
     } else {
         //el usuario no ecertó
@@ -26,6 +27,7 @@ function verificarIntento() {
         }
         intentos++;
         limpiarCaja();
+        desabilitarBTN();
     }
     
     return;
@@ -35,23 +37,17 @@ function limpiarCaja() {
     document.querySelector('#valorUsuario').value = '';
 }
 
-
 function generarNumeroSecreto() {
     let numeroGenerado = Math.floor(Math.random()*numeroMaximo)+1;
     
     console.log(numeroGenerado);
     console.log(listaNumeroSorteados);
     //si ya mostramos todos los numeros
-    if(maximosSorteos == listaNumeroSorteados.length) {
-        asignarTextoElemento('p','llegaste al maximo de numeros generados');
-    }else {
-
-    }
-
     if(listaNumeroSorteados.length == numeroMaximo) {
-        asignarTextoElemento('p', 'Ya se sorteron todos los número posibles');
-    }else {
-        
+        asignarTextoElemento('p', 'Ya se sorteron todos los número posibles ¡RECARGA NUEVAMENTE LA PAGINA!');
+        document.querySelector('#reiniciar').setAttribute('disabled',true);
+        document.getElementById('btn').disabled = true;
+       // document.getElementById('recet').disabled = false;
     }
 
     //si el numero generado esta incluido en la lista
@@ -61,6 +57,16 @@ function generarNumeroSecreto() {
         listaNumeroSorteados.push(numeroGenerado);
         return numeroGenerado;
     }
+    
+}
+
+function desabilitarBTN() {
+    if(intentos > maximosIntentos) {
+        document.getElementById('btn').disabled = true;
+        document.getElementById("reiniciar").disabled = false;
+        asignarTextoElemento('p','llegaste al maximo de intentos');
+    }
+
 }
 
 function condicionesIniciales() {
@@ -68,6 +74,7 @@ function condicionesIniciales() {
     asignarTextoElemento('p',`indica un numero del 1 al ${numeroMaximo}`);   
     numeroSecreto = generarNumeroSecreto(); 
     intentos = 1;
+    desabilitarBTN();
 }
 
 function reiniciarJuego() {
@@ -79,6 +86,7 @@ function reiniciarJuego() {
     condicionesIniciales();
     //desabilitar el boton de nuevo juego
     document.querySelector('#reiniciar').setAttribute('disabled',true);
+    document.getElementById('btn').disabled = false;
 }
 
 condicionesIniciales();
