@@ -1,9 +1,19 @@
 let numeroSecreto = 0;
 let intentos = 0;
-let maximosIntentos = 3;
+let maximosIntentos = 2;
 let listaNumeroSorteados = [];
-let numeroMaximo = 10;
+let numeroMaximo = 7;
 console.log(numeroSecreto);
+
+document.getElementById("recet").addEventListener("click", function() {
+    listaNumeroSorteados = []
+    document.getElementById('btn').disabled = false;
+    // document.getElementById("reiniciar").disabled = false;
+    document.getElementById('recet').disabled = true;
+    asignarTextoElemento('p',`indica un numero del 1 al ${numeroMaximo}`);
+    
+
+});
 
 function asignarTextoElemento(elemeto, texto) {
     let elmentoHTML = document.querySelector(elemeto);
@@ -39,25 +49,25 @@ function limpiarCaja() {
 
 function generarNumeroSecreto() {
     let numeroGenerado = Math.floor(Math.random()*numeroMaximo)+1;
-    
     console.log(numeroGenerado);
     console.log(listaNumeroSorteados);
     //si ya mostramos todos los numeros
     if(listaNumeroSorteados.length == numeroMaximo) {
-        asignarTextoElemento('p', 'Ya se sorteron todos los número posibles ¡RECARGA NUEVAMENTE LA PAGINA!');
+        asignarTextoElemento('p', 'Llegaste el número de sorteos maximos ¡PRESIONA EL BOTÓN REESTABLCER');
         document.querySelector('#reiniciar').setAttribute('disabled',true);
         document.getElementById('btn').disabled = true;
-       // document.getElementById('recet').disabled = false;
+        // document.getElementById('btn').disabled = true;
+        document.getElementById('recet').disabled = false;
+    }else {
+        //si el numero generado esta incluido en la lista
+        if (listaNumeroSorteados.includes(numeroGenerado)) {
+            return generarNumeroSecreto();
+        }else {
+            listaNumeroSorteados.push(numeroGenerado);
+            return numeroGenerado;
+        }
     }
 
-    //si el numero generado esta incluido en la lista
-    if (listaNumeroSorteados.includes(numeroGenerado)) {
-        return generarNumeroSecreto();
-    }else {
-        listaNumeroSorteados.push(numeroGenerado);
-        return numeroGenerado;
-    }
-    
 }
 
 function desabilitarBTN() {
@@ -66,7 +76,6 @@ function desabilitarBTN() {
         document.getElementById("reiniciar").disabled = false;
         asignarTextoElemento('p','llegaste al maximo de intentos');
     }
-
 }
 
 function condicionesIniciales() {
@@ -77,7 +86,7 @@ function condicionesIniciales() {
     desabilitarBTN();
 }
 
-function reiniciarJuego() {
+document.getElementById("reiniciar").addEventListener("click",function() {
     //limpear caja
     limpiarCaja();
     //indicar mensaje de intervalo de numero 
@@ -87,6 +96,12 @@ function reiniciarJuego() {
     //desabilitar el boton de nuevo juego
     document.querySelector('#reiniciar').setAttribute('disabled',true);
     document.getElementById('btn').disabled = false;
-}
+    if(listaNumeroSorteados.length === numeroMaximo) {
+    document.getElementById('btn').disabled = true;
+    generarNumeroSecreto();
+
+    }
+
+});
 
 condicionesIniciales();
