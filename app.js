@@ -1,8 +1,8 @@
 let numeroSecreto = 0;
 let intentos = 0;
-let maximosIntentos = 2;
+let maximosIntentos = 3;
 let listaNumeroSorteados = [];
-let numeroMaximo = 7;
+let numeroMaximo = 17;
 console.log(numeroSecreto);
 
 document.getElementById("recet").addEventListener("click", function() {
